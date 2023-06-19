@@ -8,7 +8,8 @@ require('./Models/db_connection');
 const cloud_router = require('./Routes/cloud.route');
 const postsChantier_router = require('./Routes/postsChantier_router');
 const user_router = require('./Routes/user.route');
-const authRoute = require('./Routes/auth.route')
+const authRoute = require('./Routes/auth.route');
+const sendMailTurquieDentalRoute = require('./Routes/sendEmailTurquieDental');
 const cookieSession = require('cookie-session');
 const passport = require('passport')
 require('./passport')
@@ -25,14 +26,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const corsOptions = {
-    origin: process.env.CLIENT_URL,
+    origin: 'https://turquiedental.com',
     credentials: true,
     'allowedHeaders': ['token', 'Content-Type'],
     'exposedHeaders': ['token'],
     'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
     'preflightContinue': false
 }
-console.log('le CLIENT: ' + process.env.CLIENT_URL)
 app.use(cors());
 
 
@@ -46,6 +46,7 @@ app.use(express.json())
 app.use(express.static('assets'));
 
 //Routes
+app.use('/turquieDental', sendMailTurquieDentalRoute)
 app.use('/chantiers', postsChantier_router);
 app.use('/users', user_router);
 app.use('/auth', authRoute);
